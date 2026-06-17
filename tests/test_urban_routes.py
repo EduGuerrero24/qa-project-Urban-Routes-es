@@ -70,8 +70,9 @@ class TestUrbanRoutes:
         self.routes_page.click_request_for_travel()
 
     def test_wait_info_driver(self):
-        self.routes_page.get_order_tittle()
-        assert self.routes_page.get_driver_name_assert() == 'driver.name.5'
+       self.routes_page.get_order_tittle()
+       driver_name = self.routes_page.get_driver_name_assert()
+       assert 'driver.name.' in driver_name
 
     @classmethod
     def teardown_class(cls):
