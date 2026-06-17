@@ -36,6 +36,7 @@ class TestUrbanRoutes:
         phone_number = data.phone_number
         self.routes_page.click_phone_number_field()
         self.routes_page.set_phone_number_field_input(phone_number)
+        assert self.routes_page.get_assert_number_field() == phone_number
         self.routes_page.click_next_button()
         self.routes_page.set_phone_sms_code()
         self.routes_page.click_confirm_button()
@@ -46,25 +47,32 @@ class TestUrbanRoutes:
         self.routes_page.click_payment_method_button()
         self.routes_page.click_button_add_credit_card()
         self.routes_page.set_credit_card_number_field(card_number)
+        assert self.routes_page.get_assert_cc_number_field() == card_number
         self.routes_page.set_credit_card_code_field(ccv_code)
+        assert self.routes_page.get_assert_card_code_field() == ccv_code
         self.routes_page.click_add_button_credit_card()
         self.routes_page.click_close_button_add_credit_card()
 
     def test_message_driver_field(self):
         message_driver = data.message_for_driver
         self.routes_page.set_messages_driver_field(message_driver)
+        assert self.routes_page.get_assert_messages_driver_field() == message_driver
 
     def test_request_manta_panuelos(self):
         self.routes_page.click_request_manta_panuelos()
+        assert self.routes_page.get_assert_switch_button() == True
 
     def test_request_ice_cream(self):
         self.routes_page.click_request_ice_cream()
+        assert self.routes_page.get_assert_ice_cream_request() == '2'
 
     def test_request_for_travel(self):
         self.routes_page.click_request_for_travel()
 
     def test_wait_info_driver(self):
         self.routes_page.get_order_tittle()
+        assert self.routes_page.get_driver_name_assert() == 'driver.name.5'
+
     @classmethod
     def teardown_class(cls):
         cls.driver.quit()

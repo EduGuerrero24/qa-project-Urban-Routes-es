@@ -33,15 +33,18 @@ class UrbanRoutesPage:
     add_button_credit_card = (By.XPATH, '//*[@id="root"]/div/div[2]/div[2]/div[2]/form/div[3]/button[1]')
     close_button_add_credit_card = (By.XPATH, '//*[@id="root"]/div/div[2]/div[2]/div[1]/button')
     messages_driver_field = (By.CSS_SELECTOR, '#comment.input')
-    request_manta_panuelos = (By.XPATH, '//div[@class="switch"]/span')
+    request_manta_panuelos =  (By.XPATH, '//div[@class="switch"]/span')
+    request_manta_panuelos_assert = (By.CLASS_NAME, 'switch-input')
     request_ice_cream = (By.XPATH, '//div[@class="counter-plus"]')
+    counter_ice_cream = (By.CLASS_NAME, 'counter-value')
     request_for_travel = (By.XPATH, '//div[@class="smart-button-wrapper"]')
-    order_tittle = (By.CSS_SELECTOR, '.order-btn-rating')
+    order_tittle = (By.CSS_SELECTOR, '.order-header-title')
+    name_driver = (By.XPATH, '//div[contains(text(),"driver.name.")]')
 
     def __init__(self, driver):
         self.driver = driver
         self.wait=WebDriverWait(self.driver, 5)
-        self.wait_order=WebDriverWait(self.driver, 30)
+        self.wait_order=WebDriverWait(self.driver, 50)
 
     #Esté metodo escribe al campo from que está en la varibale de clase from_field, la dirección de origen
     def set_from(self, from_address):
@@ -96,6 +99,9 @@ class UrbanRoutesPage:
     def set_phone_number_field_input(self, number_input):
         self.wait.until(EC.element_to_be_clickable(self.phone_number_field_input)).send_keys(number_input)
 
+    def get_assert_number_field(self):
+        return self.wait.until(EC.element_to_be_clickable(self.phone_number_field_input)).get_attribute('value')
+
     def get_next_button(self):
         return self.wait.until(EC.element_to_be_clickable(self.next_button))
 
@@ -139,6 +145,9 @@ class UrbanRoutesPage:
     def set_credit_card_number_field(self, number_input):
         self.get_credit_card_number_field().send_keys(number_input)
 
+    def get_assert_cc_number_field(self):
+        return self.wait.until(EC.element_to_be_clickable(self.credit_card_number_field)).get_attribute('value')
+
     def get_credit_card_code_field(self):
         return self.wait.until(EC.visibility_of_element_located(self.credit_card_code_field))
 
@@ -148,6 +157,9 @@ class UrbanRoutesPage:
 
     def get_add_button_credit_card(self):
         return self.wait.until(EC.element_to_be_clickable(self.add_button_credit_card))
+
+    def get_assert_card_code_field(self):
+        return self.wait.until(EC.element_to_be_clickable(self.credit_card_code_field)).get_attribute('value')
 
     def click_add_button_credit_card(self):
         self.get_add_button_credit_card().click()
@@ -165,12 +177,18 @@ class UrbanRoutesPage:
     def set_messages_driver_field(self, message):
         self.get_messages_driver_field().send_keys(message)
 
+    def get_assert_messages_driver_field(self):
+        return self.wait.until(EC.element_to_be_clickable(self.messages_driver_field)).get_attribute('value')
+
 #Pedir Manta y pañuelos
     def get_request_manta_panuelos(self):
         return self.wait.until(EC.element_to_be_clickable(self.request_manta_panuelos))
 
     def click_request_manta_panuelos(self):
         self.get_request_manta_panuelos().click()
+
+    def get_assert_switch_button(self): #Crear un localizador nuevo para esta parte
+        return self.wait.until(EC.element_located_selection_state_to_be(self.request_manta_panuelos_assert, True))
 
 #Pedir 2 helados
     def get_request_ice_cream(self):
@@ -179,6 +197,9 @@ class UrbanRoutesPage:
     def click_request_ice_cream(self):
         self.get_request_ice_cream().click()
         self.get_request_ice_cream().click()
+
+    def get_assert_ice_cream_request(self):
+        return self.wait.until(EC.visibility_of_element_located(self.counter_ice_cream )).text
 
 #Pedir el taxi
     def get_request_for_travel(self):
@@ -190,3 +211,6 @@ class UrbanRoutesPage:
 # Esperar a que aparezca la informacion del conductor en el modal
     def get_order_tittle(self):
         return self.wait_order.until(EC.visibility_of_element_located(self.order_tittle))
+
+    def get_driver_name_assert(self):
+        return self.wait_order.until(EC.visibility_of_element_located(self.name_driver)).text
